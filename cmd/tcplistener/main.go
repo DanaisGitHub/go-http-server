@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"http-server/internal/request"
 	"io"
 	"net"
 )
@@ -23,10 +24,14 @@ func main() {
 		}
 		fmt.Println("tcp server listening")
 
-		var lines <-chan string = getLinesChannel(tcpRequest) 
-		for r := range lines {                                // whilst channel is still open
-			fmt.Printf("read: %s\n", r)
+		// var lines <-chan string = getLinesChannel(tcpRequest)
+		req, err := request.RequestFromReader(tcpRequest)
+		if err != nil {
+			fmt.Printf("couldn't get ")
+			return
 		}
+
+		fmt.Println(*req)
 	}
 
 }

@@ -34,13 +34,11 @@ func parseRequestLine(s string) (*RequestLine, string, error) {
 	}
 	requestLine := s[:reqlI]
 	restOfReq := s[reqlI+len(SEPARATOR)-1:]
-
 	// Seperate the Request line into 3 parts
 	splitReqLine := strings.Split(requestLine, " ")
 	if len(splitReqLine) != 3 {
 		return nil, restOfReq, fmt.Errorf("malformed request line spaces")
 	}
-
 	httpVersion := strings.Split(splitReqLine[2], "/")
 	if len(httpVersion) != 2 {
 		return nil, restOfReq, fmt.Errorf("malformed http version")
@@ -49,15 +47,12 @@ func parseRequestLine(s string) (*RequestLine, string, error) {
 		return nil, restOfReq, fmt.Errorf("wrong http version")
 
 	}
-
 	rl := &RequestLine{
 		HttpVersion:   httpVersion[1],
 		Method:        splitReqLine[0],
 		RequestTarget: splitReqLine[1],
 	}
-
 	return rl, restOfReq, nil
-
 }
 
 func RequestFromReader(reader io.Reader) (*Request, error) {
@@ -72,9 +67,8 @@ func RequestFromReader(reader io.Reader) (*Request, error) {
 		bytesRead += reqI
 		streamBytes = append(streamBytes, chunk[:reqI]...)
 		if err != nil && err == io.EOF {
-			if err != nil {
-				return nil, fmt.Errorf("EOF: %w", err)
-			}
+			return nil, fmt.Errorf("EOF: %w", err)
+
 		}
 		if err != nil {
 			return nil, fmt.Errorf("failed to read chunk:=> %w", err)
@@ -87,7 +81,6 @@ func RequestFromReader(reader io.Reader) (*Request, error) {
 			pos = num
 			break
 		}
-
 	}
 
 	firstLine := streamBytes[:pos]

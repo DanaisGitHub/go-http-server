@@ -32,7 +32,7 @@ func TestRequestLineParse0(t *testing.T) {
 	// Test: Good GET Request line
 	reader := &chunkReader{
 		data:            "GET / HTTP/1.1\r\nHost: localhost:42069\r\nUser-Agent: curl/7.81.0\r\nAccept: */*\r\n\r\n",
-		numBytesPerRead: 3,
+		numBytesPerRead: 9,
 	}
 
 	r, err = RequestFromReader(reader)
@@ -56,9 +56,6 @@ func TestRequestLineParse0(t *testing.T) {
 
 }
 
-func TestRequestLineParse(t *testing.T) {
-
-}
 
 type chunkReader struct {
 	data            string
