@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"http-server/internal/headers"
 )
 
 const (
@@ -14,6 +15,7 @@ const (
 type Request struct {
 	RequestLine RequestLine
 	state       int
+	Headers headers.Headers
 }
 
 type RequestLine struct {

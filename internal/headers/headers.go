@@ -3,6 +3,7 @@ package headers
 import (
 	"bytes"
 	"fmt"
+	"maps"
 	"regexp"
 	"strings"
 )
@@ -11,13 +12,25 @@ var NEWLINE = []byte("\r\n")
 
 type Headers map[string]string
 
-func (h Headers) Get(name string) string {
-	return h[strings.ToLower(name)]
+func (h Headers) Get(field string) string {
+	return h[strings.ToLower(field)]
 }
 
 func (h Headers) Set(field, value string) {
 	field = strings.ToLower(field)
-	h[field] = value
+	keys := maps.Keys(h)
+
+	found := false
+	for key := range keys {
+		if key == field {
+			found = true
+			h[field] = h[field] + fmt.Sprintf(", %s", value)
+			break
+		}
+	}
+	if !found {
+		h[field] = value
+	}
 }
 
 func isToken(fieldName string) bool {
