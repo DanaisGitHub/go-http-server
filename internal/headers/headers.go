@@ -41,7 +41,7 @@ func (h Headers) Parse(data []byte) (n int, done bool, err error) {
 			break
 		}
 
-		currData := data[n:idx]
+		currData := data[n : n+idx]
 		n += idx + len(NEWLINE)
 
 		parts := bytes.SplitN(currData, []byte(":"), 2)
@@ -49,10 +49,11 @@ func (h Headers) Parse(data []byte) (n int, done bool, err error) {
 			return 0, false, fmt.Errorf("malformed header")
 		}
 		field := parts[0]
-		value := bytes.TrimSpace(parts[1])
 		if bytes.HasSuffix(field, []byte(" ")) {
 			return 0, false, fmt.Errorf("field of header malformed, space(s) between field & :")
 		}
+		field = bytes.TrimSpace(field)
+		value := bytes.TrimSpace(parts[1])
 
 		if !isToken(string(field)) {
 			return 0, false, fmt.Errorf("field name %s is not valid token", field)
